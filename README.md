@@ -1,77 +1,77 @@
-# Post-Surgery-Recovery-Tracker
-Post-surgery recovery requires continuous monitoring to ensure early detection of complications. However, many patients miss or delay follow-up visits due to:
+# 🏥 Post-Surgery Recovery Tracker
 
-Travel constraints
+## 📌 Problem Statement  
+Post-surgery recovery requires **continuous monitoring** to ensure early detection of complications. However, many patients **miss or delay follow-up visits** due to:  
 
-Busy schedules
+- 🚗 Travel constraints  
+- ⏳ Busy schedules  
+- 🏥 Limited access to specialists  
 
-Limited access to specialists
+This often results in **preventable complications, delayed recovery, and hospital readmissions**.  
 
-This often leads to preventable complications, delayed recovery, or even hospital readmissions.
+---
 
-Project Expectation
+## 🎯 Project Expectation  
+We aim to build a **digital recovery companion** that:  
 
-We aim to build a digital recovery companion that:
+- ✅ Allows patients to log daily recovery data such as:  
+  - Pain levels  
+  - Medication intake  
+  - Wound photographs  
+  - Mobility progress (steps, exercises)  
 
-Allows patients to log daily recovery data such as:
+- ✅ Enables **secure data sharing** with healthcare providers for **remote monitoring**.  
+- ✅ Provides **AI-powered enhancements** to make recovery **proactive, continuous, and accessible from anywhere**.  
 
-Pain levels
+---
 
-Medication intake
+## 🚀 Key Features  
 
-Wound photographs
+### 📌 Daily Recovery Logging  
+- Track **pain levels**, **medication adherence**, **mobility**, and **mood**.  
+- Upload wound photographs for **healing assessment**.  
 
-Mobility progress (steps, exercises)
+### 📡 Remote Monitoring  
+- Doctors can review patient updates **without physical visits**.  
+- **Automated alerts** for concerning symptoms.  
 
-Enables secure sharing of data with healthcare providers for remote monitoring.
+### 🤖 AI-Powered Enhancements *(value-add)*  
+- **Wound healing analysis** using uploaded photos.  
+- **Predictive alerts** for potential complications (e.g., infection, poor mobility progress).  
 
-Provides AI-enhanced features to make recovery proactive, continuous, and accessible from anywhere.
+### 💬 Patient Engagement  
+- In-app chat with medical staff for **real-time guidance**.  
+- **Automated reminders** for medication & exercises.  
+- Motivational nudges + **mental health check-ins**.  
 
-Key Features
+### 📊 Analytics & Reports  
+- **Weekly summaries** of recovery progress.  
+- Visualization of:  
+  - Pain reduction trends  
+  - Mobility improvements  
+  - Medication adherence  
 
-Daily Recovery Logging
+---
 
-Track pain levels, medication adherence, mobility, and mood.
+## 🛠️ Tech Stack  
 
-Upload wound photographs for healing assessment.
+- **Frontend**: React.js / HTML + CSS + JavaScript  
+- **Backend**: Flask / Django / Node.js  
+- **AI/ML**: Google Gemini / TensorFlow / PyTorch *(for wound analysis & predictive alerts)*  
+- **Database**: PostgreSQL / MongoDB  
+- **Cloud & Storage**: AWS S3 / Firebase *(for secure photo storage)*  
+- **Notifications**: APScheduler / Twilio / Firebase Cloud Messaging  
 
-Remote Monitoring
+---
 
-Doctors can review patient updates without requiring physical visits.
+## 🔮 Impact  
 
-Alerts are generated for concerning symptoms.
+✔️ Reduces unnecessary **hospital readmissions**  
+✔️ Provides patients with a **personalized digital companion**  
+✔️ Enables doctors to **monitor multiple patients remotely**  
+✔️ Makes post-surgery care **accessible, proactive, and continuous**  
 
-AI-Powered Enhancements (value-add)
+---
 
-Wound healing analysis using uploaded photos.
-
-Predictive alerts for potential complications (e.g., infection, poor mobility progress).
-
-Patient Engagement
-
-In-app chat with medical staff for guidance.
-
-Automated medication and exercise reminders.
-
-Motivational nudges and mental health check-ins.
-
-Analytics & Reports
-
-Weekly summaries of recovery progress.
-
-Visualization of pain reduction, mobility improvements, and adherence.
-
-Tech Stack
-
-Frontend: React.js / HTML + CSS + JavaScript
-
-Backend: Flask / Django / Node.js
-
-AI/ML: Google Gemini / TensorFlow / PyTorch (for wound analysis & predictive alerts)
-
-Database: PostgreSQL / MongoDB
-
-Cloud & Storage: AWS S3 / Firebase for secure image storage
-
-Notifications: APScheduler / Twilio / Firebase Cloud Messaging
-
+## 📜 License  
+MIT License © 2025 Post-Surgery Recovery Tracker Team  
