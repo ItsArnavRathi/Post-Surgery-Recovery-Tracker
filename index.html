@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CareNest Bot</title>
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body { 
+            font-family: 'Segoe UI', Arial, sans-serif; 
+            text-align: center; 
+            margin: 0;
+            padding: 0;
+            background-image: linear-gradient(rgb(239, 81, 33), rgb(113, 46, 22)), url('/static/background.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;    
+        }
+        #chat-container {
+            width: 90%;
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: rgba(255, 255, 255, 0.6);
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.2);
+            padding: 25px;
+            backdrop-filter: blur(3px);
+        }
+        #chatbox { 
+            width: calc(100% - 30px);
+            height: 450px;
+            margin: auto; 
+            text-align: left; 
+            border: 1px solid #ddd; 
+            border-radius: 10px;
+            padding: 15px; 
+            overflow-y: auto;
+            margin-bottom: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+        }
+        .message {
+            margin-bottom: 12px;
+            padding: 10px 15px;
+            border-radius: 18px;
+            display: inline-block;
+            word-wrap: break-word;
+            line-height: 1.4;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            animation: fadeIn 0.3s ease;
+            max-width: 80%;
+            white-space: pre-line;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .message-container {
+            width: 100%;
+            margin-bottom: 12px;
+            display: flex;
+        }
+        .user-container {
+            justify-content: flex-end;
+        }
+        .assistant-container {
+            justify-content: flex-start;
+        }
+        .user { 
+            color: white;
+            background-color: #dc4e27;
+            text-align: right;
+        }
+        .assistant { 
+            color: #333;
+            background-color: #e9e9eb;
+            text-align: left;
+        }
+        #input-area {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        #userInput {
+            flex-grow: 1;
+            padding: 10px 15px;
+            border: 1px solid #ddd;
+            border-radius: 30px;
+            font-size: 16px;
+            outline: none;
+            transition: border 0.3s;
+        }
+        #userInput:focus {
+            border-color: #0084ff;
+            box-shadow: 0 0 5px rgba(0,132,255,0.3);
+        }
+        .btn {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: #dc4e27;
+            color: white;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background-color: #0066cc;
+        }
+        .upload-btn {
+            background-color: #28a745;
+        }
+        .upload-btn:hover {
+            background-color: #218838;
+        }
+        .clear-btn {
+            background-color: #dc4e27;
+            margin-bottom: 0;
+            width: 40px;
+            height: 40px;
+        }
+        .clear-btn:hover {
+            background-color: #dc4e27;
+        }
+        h2 {
+            color: #dc4e27;
+            margin-bottom: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .logo {
+            width: 60px;
+            height: 60px;
+            margin-right: 15px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #0084ff;
+        }
+        .title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .typing-indicator {
+            display: inline-block;
+            margin-left: 5px;
+        }
+        .typing-indicator span {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            margin-right: 5px;
+            background-color: #555;
+            border-radius: 50%;
+            animation: typing 1s infinite;
+        }
+        .typing-indicator span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .typing-indicator span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes typing {
+            0%, 60%, 100% { transform: translateY(0); }
+            30% { transform: translateY(-5px); }
+        }
+        .upload-area {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        #fileInput {
+            display: none;
+        }
+        .upload-info {
+            font-size: 12px;
+            color: #666;
+            text-align: center;
+            margin-top: 5px;
+        }
+        .upload-status {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            text-align: center;
+            display: none;
+        }
+        .upload-success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .upload-error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div id="chat-container">
+        <div class="header">
+            <div class="title-container">
+                <img src="/static/logo.png" alt="CareNest Logo" class="logo">
+                <h2>CareNest Bot</h2>
+            </div>
+            <button class="btn clear-btn" onclick="clearChat()">
+                <i class="fas fa-trash-alt"></i>
+            </button>
+        </div>
+        <div id="chatbox"></div>
+        
+        <div id="uploadStatus" class="upload-status"></div>
+        
+        <div id="input-area">
+            <input type="text" id="userInput" placeholder="Type a message..." />
+            <input type="file" id="fileInput" accept="image/*" onchange="uploadPhoto()">
+            <button class="btn upload-btn" onclick="document.getElementById('fileInput').click()" title="Upload Photo">
+                <i class="fas fa-camera"></i>
+            </button>
+            <button class="btn" onclick="sendMessage()">
+                <i class="fas fa-paper-plane"></i>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            document.getElementById("userInput").addEventListener("keypress", function(event) {
+                if (event.key === "Enter") {
+                    sendMessage();
+                }
+            });
+            
+            // Add welcome message
+            addAssistantMessage("Hello! I'm CareNest Bot. How can I assist you with your health and wellness today?\n\nI can help you with:\n• Pain monitoring and medication reminders\n• Symptom tracking and health check-ins\n• Photo uploads for wound monitoring\n• Current time information\n• Progress reports and health insights");
+        });
+
+        function addUserMessage(text) {
+            let chatbox = document.getElementById("chatbox");
+            let messageContainer = document.createElement("div");
+            messageContainer.className = "message-container user-container";
+            
+            let messageDiv = document.createElement("div");
+            messageDiv.className = "message user";
+            messageDiv.textContent = text;
+            
+            messageContainer.appendChild(messageDiv);
+            chatbox.appendChild(messageContainer);
+            chatbox.scrollTop = chatbox.scrollHeight;
+        }
+        
+        function addAssistantMessage(text) {
+            let chatbox = document.getElementById("chatbox");
+            let messageContainer = document.createElement("div");
+            messageContainer.className = "message-container assistant-container";
+            
+            let messageDiv = document.createElement("div");
+            messageDiv.className = "message assistant";
+            messageDiv.textContent = text;
+            
+            messageContainer.appendChild(messageDiv);
+            chatbox.appendChild(messageContainer);
+            chatbox.scrollTop = chatbox.scrollHeight;
+            
+            return messageDiv;
+        }
+
+        function sendMessage() {
+            let userInput = document.getElementById("userInput").value;
+            if (userInput.trim() === "") return;
+            
+            // Add user message
+            addUserMessage(userInput);
+            
+            // Clear input field
+            document.getElementById("userInput").value = "";
+            
+            // Add thinking message with animated dots
+            let thinkingDiv = addAssistantMessage("Thinking");
+            thinkingDiv.innerHTML = "Thinking<div class='typing-indicator'><span></span><span></span><span></span></div>";
+            
+            // Send request to server
+            fetch("/chat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ message: userInput })
+            })
+            .then(response => {
+                return response.json();
+            })
+            .then(data => {
+                thinkingDiv.textContent = data.response;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                thinkingDiv.textContent = "Sorry, I couldn't process your request. Please try again later.";
+            });
+        }
+        
+        function uploadPhoto() {
+            const fileInput = document.getElementById('fileInput');
+            const uploadStatus = document.getElementById('uploadStatus');
+            const file = fileInput.files[0];
+            
+            if (!file) return;
+            
+            // Show upload status
+            uploadStatus.className = 'upload-status';
+            uploadStatus.style.display = 'block';
+            uploadStatus.textContent = 'Uploading photo...';
+            
+            // Create form data
+            const formData = new FormData();
+            formData.append('file', file);
+            
+            // Upload the file
+            fetch('/upload-photo', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'ok') {
+                    // Show success message
+                    uploadStatus.className = 'upload-status upload-success';
+                    uploadStatus.textContent = 'Photo uploaded successfully!';
+                    
+                    // Add the bot response to chat
+                    if (data.message) {
+                        addAssistantMessage(data.message);
+                    }
+                    
+                    // Clear file input
+                    fileInput.value = '';
+                } else {
+                    throw new Error(data.error || 'Upload failed');
+                }
+            })
+            .catch(error => {
+                console.error('Upload error:', error);
+                uploadStatus.className = 'upload-status upload-error';
+                uploadStatus.textContent = 'Upload failed. Please try again.';
+            })
+            .finally(() => {
+                // Hide upload status after 3 seconds
+                setTimeout(() => {
+                    uploadStatus.style.display = 'none';
+                }, 3000);
+            });
+        }
+        
+        function clearChat() {
+            let chatbox = document.getElementById("chatbox");
+            chatbox.innerHTML = "";
+            
+            // Add welcome message again
+            addAssistantMessage("Chat cleared! How can I assist you with your health today?\n\nI can help you with:\n• Pain monitoring and medication reminders\n• Symptom tracking and health check-ins\n• Photo uploads for wound monitoring\n• Current time information\n• Progress reports and health insights");
+        }
+    </script>
+</body>
+</html>
