@@ -13,6 +13,3 @@ It provides wound classification, healing scores, infection risk analysis, and h
 - Trend Tracking – Healing trends and expected recovery predictions.
 
 ---
-
-/assets
-"C:\Users\arjun\Downloads\woundAnalysis1.jpg"
