@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Login</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #d8462c 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .login-container {
+            background: white;
+            padding: 32px;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 384px;
+        }
+
+        .header {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+
+        .logo {
+            height: 64px;
+            margin-bottom: 16px;
+            /* Placeholder for logo - you can replace with actual image */
+            width: 64px;
+            background: #d1312b;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #1f2937;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #6b7280;
+            margin-bottom: 0;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .input {
+            width: 100%;
+            padding: 12px 16px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 16px;
+            transition: all 0.2s ease;
+            outline: none;
+        }
+
+        .input:focus {
+            border-color: #d63a34;
+            box-shadow: 0 0 0 3px rgba(96, 165, 250, 0.1);
+        }
+
+        .input::placeholder {
+            color: #9ca3af;
+        }
+
+        .login-button {
+            width: 100%;
+            background: #3b82f6;
+            color: white;
+            padding: 12px 16px;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+
+        .login-button:hover {
+            background: #2563eb;
+        }
+
+        .login-button:active {
+            background: #1d4ed8;
+            transform: translateY(1px);
+        }
+
+        .forgot-password {
+            text-align: center;
+            margin-top: 16px;
+        }
+
+        .forgot-password a {
+            color: #3b82f6;
+            text-decoration: none;
+            font-size: 14px;
+        }
+
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+
+        /* Responsive design */
+        @media (max-width: 480px) {
+            .login-container {
+                padding: 24px;
+                margin: 16px;
+            }
+            
+            .title {
+                font-size: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="login-container">
+        <div class="header">
+            <!-- Replace this div with actual logo image -->
+            <div class="logo">L</div>
+            <!-- Uncomment below line and comment above div when you have logo.png -->
+            <!-- <img src="/logo.png" alt="Logo" class="logo" /> -->
+            
+            <h1 class="title">Welcome Patient</h1>
+            <p class="subtitle">Please login to continue</p>
+        </div>
+
+        <form class="form" onsubmit="handleLogin(event)">
+            <input 
+                type="email" 
+                placeholder="Email" 
+                class="input"
+                required
+            />
+            <input 
+                type="password" 
+                placeholder="Password" 
+                class="input"
+                required
+            />
+            <button type="submit" class="login-button">
+                Login
+            </button>
+        </form>
+
+        <div class="forgot-password">
+            <a href="#" onclick="handleForgotPassword()">Forgot Password?</a>
+        </div>
+    </div>
+
+    <script>
+        function handleLogin(event) {
+            event.preventDefault();
+            
+            // Get form data
+            const formData = new FormData(event.target);
+            const email = event.target.querySelector('input[type="email"]').value;
+            const password = event.target.querySelector('input[type="password"]').value;
+            
+            // Basic validation
+            if (!email || !password) {
+                alert('Please fill in all fields');
+                return;
+            }
+            
+            // Show loading state
+            const loginButton = event.target.querySelector('.login-button');
+            const originalText = loginButton.textContent;
+            loginButton.textContent = 'Logging in...';
+            loginButton.disabled = true;
+            
+            // Simulate login process (replace with actual API call)
+            setTimeout(() => {
+                // Here you would typically send data to your backend
+                console.log('Login attempt:', { email, password });
+                
+                // For demo purposes, accept any email/password
+                // In real implementation, validate with your backend
+                if (email && password) {
+                    // Store user info in sessionStorage (for demo)
+                    sessionStorage.setItem('userEmail', email);
+                    sessionStorage.setItem('userName', email.split('@')[0]);
+                    sessionStorage.setItem('isLoggedIn', 'true');
+                    
+                    // Navigate to dashboard
+                    window.location.href = 'dashboard.html'; // Replace with your dashboard page URL
+                } else {
+                    alert('Invalid credentials. Please try again.');
+                    loginButton.textContent = originalText;
+                    loginButton.disabled = false;
+                }
+            }, 1000);
+        }
+
+        function handleForgotPassword() {
+            // Show forgot password form or redirect to forgot password page
+            const email = prompt('Please enter your email address for password reset:');
+            if (email) {
+                alert(`Password reset link will be sent to ${email}`);
+                // In real implementation, send reset email via backend
+            }
+        }
+
+        // Add some interactive effects
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('.input');
+            
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.01)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #e05c37 0%, #dc7b4d 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .dashboard-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .header {
+            background: white;
+            padding: 20px 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            color: #1f2937;
+            font-size: 28px;
+            font-weight: 700;
+        }
+
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .user-avatar {
+            width: 45px;
+            height: 45px;
+            background: #ed4523;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .logout-btn {
+            background: #ef4444;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .logout-btn:hover {
+            background: #dc2626;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 12px;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 18px;
+        }
+
+        .card-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .chatbot-card {
+            background: linear-gradient(135deg, #3b82f6 100%);
+            color: white;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .chatbot-card:hover {
+            transform: translateY(-4px);
+        }
+
+        .chatbot-card .card-title {
+            color: white;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .chatbot-description {
+            opacity: 0.9;
+            margin-bottom: 20px;
+        }
+
+        .premium-card {
+            background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+            color: white;
+            cursor: pointer;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .premium-card::before {
+            content: '⭐';
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            font-size: 60px;
+            opacity: 0.2;
+        }
+
+        .premium-card .card-title {
+            color: white;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+            color: #374151;
+        }
+
+        .form-input, .form-select, .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-input:focus, .form-select:focus, .form-textarea:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .slider-container {
+            margin: 15px 0;
+        }
+
+        .slider {
+            width: 100%;
+            height: 6px;
+            background: #e5e7eb;
+            border-radius: 3px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .slider-value {
+            text-align: center;
+            margin-top: 10px;
+            font-weight: 600;
+            color: #3b82f6;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            accent-color: #3b82f6;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 500;
+            transition: background-color 0.2s ease;
+            width: 100%;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: #6b7280;
+            color: white;
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-secondary:hover {
+            background: #4b5563;
+        }
+
+        .upload-area {
+            border: 2px dashed #d1d5db;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            margin: 15px 0;
+        }
+
+        .upload-area:hover {
+            border-color: #3b82f6;
+            background: #f8faff;
+        }
+
+        .upload-area.dragover {
+            border-color: #3b82f6;
+            background: #eff6ff;
+        }
+
+        .chart-placeholder {
+            height: 200px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6b7280;
+            margin: 15px 0;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.show {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            max-width: 500px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-header {
+            font-size: 24px;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 15px;
+        }
+
+        .modal-body {
+            color: #6b7280;
+            margin-bottom: 25px;
+        }
+
+        .modal-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .success-message {
+            background: #10b981;
+            color: white;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 15px 0;
+            text-align: center;
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .header {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .modal-buttons {
+                flex-direction: column;
+            }
+        }
+
+        /* Icon colors */
+        .icon-chat { background: #10b981; }
+        .icon-surgery { background: #3b82f6; }
+        .icon-log { background: #8b5cf6; }
+        .icon-mobility { background: #06b6d4; }
+        .icon-wound { background: #ef4444; }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Header -->
+        <div class="header">
+            
+            <h1>Patient Dashboard</h1>
+            <div class="user-info">
+                <div class="user-avatar" id="user-avatar">U</div>
+                <span id="user-name">User</span>
+                <button class="logout-btn" onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <!-- Dashboard Grid -->
+        <div class="dashboard-grid">
+            <!-- Chatbot Card -->
+            <div class="card chatbot-card" onclick="openChatbot()">
+                <div class="card-title">🤖 Open NestCare Bot</div>
+                <div class="chatbot-description">Get instant help and answers to your medical questions</div>
+                <div style="font-size: 14px; opacity: 0.8;">Click to start chatting</div>
+            </div>
+
+            <!-- Surgery Details -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-surgery">🏥</div>
+                    <div class="card-title">Surgery Details</div>
+                </div>
+                <form onsubmit="saveSurgeryDetails(event)">
+                    <div class="form-group">
+                        <label class="form-label">Surgery Type</label>
+                        <select class="form-select" required>
+                            <option value="">Select Surgery Type</option>
+                            <option value="knee">Knee Replacement</option>
+                            <option value="hip">Hip Replacement</option>
+                            <option value="shoulder">Shoulder Surgery</option>
+                            <option value="spine">Spine Surgery</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Surgery Date</label>
+                        <input type="date" class="form-input" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-textarea" placeholder="Additional notes about your surgery..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Save Surgery Details</button>
+                </form>
+                <div class="success-message" id="surgery-success">Surgery details saved successfully!</div>
+            </div>
+
+            <!-- Daily Logs -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-log">📝</div>
+                    <div class="card-title">Daily Logs</div>
+                </div>
+                <form onsubmit="saveDailyLog(event)">
+                    <div class="form-group">
+                        <label class="form-label">Date</label>
+                        <input type="date" class="form-input" id="log-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Pain Level (0-10)</label>
+                        <div class="slider-container">
+                            <input type="range" class="slider" min="0" max="10" value="0" id="pain-slider">
+                            <div class="slider-value" id="pain-value">0 - No Pain</div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Medication Taken</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="med1" value="ibuprofen">
+                                <label for="med1">Ibuprofen</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="med2" value="acetaminophen">
+                                <label for="med2">Acetaminophen</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="med3" value="prescribed">
+                                <label for="med3">Prescribed Medication</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Notes</label>
+                        <textarea class="form-textarea" placeholder="How are you feeling today?"></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Save Daily Log</button>
+                </form>
+                <div class="success-message" id="log-success">Daily log saved successfully!</div>
+            </div>
+
+            <!-- Mobility Progress -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-mobility">🚶</div>
+                    <div class="card-title">Mobility Progress</div>
+                </div>
+                <form onsubmit="saveMobilityProgress(event)">
+                    <div class="form-group">
+                        <label class="form-label">Exercises Completed</label>
+                        <div class="checkbox-group">
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ex1" value="walking">
+                                <label for="ex1">Walking</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ex2" value="stretching">
+                                <label for="ex2">Stretching</label>
+                            </div>
+                            <div class="checkbox-item">
+                                <input type="checkbox" id="ex3" value="physiotherapy">
+                                <label for="ex3">Physiotherapy</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Steps Count</label>
+                        <input type="number" class="form-input" placeholder="Enter your steps count" min="0">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Pain During Movement (0-10)</label>
+                        <div class="slider-container">
+                            <input type="range" class="slider" min="0" max="10" value="0" id="movement-pain-slider">
+                            <div class="slider-value" id="movement-pain-value">0 - No Pain</div>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn-primary">Save Progress</button>
+                </form>
+                <div class="chart-placeholder">
+                    📊 Weekly Progress Chart<br>
+                    <small>(Premium feature for detailed analytics)</small>
+                </div>
+                <div class="success-message" id="mobility-success">Mobility progress saved successfully!</div>
+            </div>
+
+            <!-- Wound Healing Analysis -->
+            <div class="card">
+                <div class="card-header">
+                    <div class="card-icon icon-wound">🩹</div>
+                    <div class="card-title">Wound Healing Analysis</div>
+                </div>
+                <form onsubmit="saveWoundAnalysis(event)">
+                    <div class="form-group">
+                        <label class="form-label">Upload Wound Photos</label>
+                        <div class="upload-area" onclick="document.getElementById('wound-photos').click()">
+                            📷 Click or drag photos here
+                            <input type="file" id="wound-photos" multiple accept="image/*" style="display: none;" onchange="handleFileUpload(this)">
+                        </div>
+                        <div id="uploaded-files"></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Wound Size (cm)</label>
+                        <input type="text" class="form-input" placeholder="e.g., 2x3 cm">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Wound Color</label>
+                        <select class="form-select">
+                            <option value="">Select Color</option>
+                            <option value="pink">Pink (Healthy)</option>
+                            <option value="red">Red (Inflamed)</option>
+                            <option value="yellow">Yellow (Infected)</option>
+                            <option value="black">Black (Necrotic)</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Discharge</label>
+                        <select class="form-select">
+                            <option value="">Select Discharge Type</option>
+                            <option value="none">None</option>
+                            <option value="clear">Clear</option>
+                            <option value="yellow">Yellow/Pus</option>
+                            <option value="bloody">Bloody</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">Additional Notes</label>
+                        <textarea class="form-textarea" placeholder="Describe any pain, itching, or other symptoms..."></textarea>
+                    </div>
+                    <button type="submit" class="btn-primary">Save Analysis</button>
+                </form>
+                <div class="success-message" id="wound-success">Wound analysis saved successfully!</div>
+            </div>
+
+            <!-- Premium Feature -->
+            <div class="card premium-card" onclick="showPremiumModal()">
+                <div class="card-title">⭐ Upgrade to Premium</div>
+                <div style="margin-bottom: 15px; opacity: 0.9;">
+                    Unlock AI-powered analysis, detailed tracking, and personalized insights
+                </div>
+                <div style="font-size: 14px; opacity: 0.8;">
+                    • Dedicated 24/7 medical staff<br>
+                    • Prioritized online consultations <br>
+                    • Customized Nutrition and Physio plans<br>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Premium Modal -->
+    <div class="modal" id="premium-modal">
+        <div class="modal-content">
+            <div class="modal-header">🌟 Upgrade to Premium</div>
+            <div class="modal-body">
+                Get AI-powered analysis, detailed progress tracking, and personalized health insights to accelerate your recovery journey.
+                <br><br>
+                <strong>Premium Features:</strong>
+                <ul style="text-align: left; margin: 15px 0;">
+                    <li>AI-powered wound healing analysis</li>
+                    <li>Advanced mobility tracking with charts</li>
+                    <li>Personalized recovery recommendations</li>
+                    <li>Export detailed health reports</li>
+                    <li>24/7 priority support</li>
+                </ul>
+            </div>
+            <div class="modal-buttons">
+                <button class="btn-primary" onclick="upgradeToPremium()">Upgrade Now - $9.99/month</button>
+                <button class="btn-secondary" onclick="closePremiumModal()">Maybe Later</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if user is logged in and load user info
+        document.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = sessionStorage.getItem('isLoggedIn');
+            const userEmail = sessionStorage.getItem('userEmail');
+            const userName = sessionStorage.getItem('userName');
+            
+            if (!isLoggedIn) {
+                // Redirect to login page if not logged in
+                alert('Please log in to access the dashboard');
+                window.location.href = 'login.html'; // Replace with your login page URL
+                return;
+            }
+            
+            // Update user info in header
+            if (userName) {
+                document.getElementById('user-name').textContent = userName.charAt(0).toUpperCase() + userName.slice(1);
+                document.getElementById('user-avatar').textContent = userName.charAt(0).toUpperCase();
+            }
+        });
+
+        // Set today's date as default for logs
+        document.getElementById('log-date').value = new Date().toISOString().split('T')[0];
+
+        // Pain slider functionality
+        const painSlider = document.getElementById('pain-slider');
+        const painValue = document.getElementById('pain-value');
+        const painLevels = ['No Pain', 'Minimal', 'Mild', 'Moderate', 'Moderate-Severe', 'Severe', 'Very Severe', 'Intense', 'Excruciating', 'Unbearable', 'Maximum'];
+
+        painSlider.addEventListener('input', function() {
+            painValue.textContent = `${this.value} - ${painLevels[this.value]}`;
+        });
+
+        // Movement pain slider
+        const movementPainSlider = document.getElementById('movement-pain-slider');
+        const movementPainValue = document.getElementById('movement-pain-value');
+
+        movementPainSlider.addEventListener('input', function() {
+            movementPainValue.textContent = `${this.value} - ${painLevels[this.value]}`;
+        });
+
+        // File upload handling
+        function handleFileUpload(input) {
+            const files = input.files;
+            const uploadedFilesDiv = document.getElementById('uploaded-files');
+            uploadedFilesDiv.innerHTML = '';
+            
+            for(let i = 0; i < files.length; i++) {
+                const fileName = files[i].name;
+                const fileDiv = document.createElement('div');
+                fileDiv.style.cssText = 'background: #f3f4f6; padding: 8px; border-radius: 4px; margin: 5px 0; font-size: 14px;';
+                fileDiv.textContent = `📎 ${fileName}`;
+                uploadedFilesDiv.appendChild(fileDiv);
+            }
+        }
+
+        // Navigation functions
+        function openChatbot() {
+            // In a real app, this would navigate to chatbot page
+            alert('Opening chatbot... (navigate to /chatbot)');
+        }
+
+        function logout() {
+            if(confirm('Are you sure you want to logout?')) {
+                // Clear session data
+                sessionStorage.removeItem('isLoggedIn');
+                sessionStorage.removeItem('userEmail');
+                sessionStorage.removeItem('userName');
+                
+                // Redirect to login page
+                alert('Logged out successfully');
+                window.location.href = 'login.html'; // Replace with your login page URL
+            }
+        }
+
+        // Form submission functions
+        function saveSurgeryDetails(event) {
+            event.preventDefault();
+            // In a real app, this would send data to backend
+            showSuccess('surgery-success');
+        }
+
+        function saveDailyLog(event) {
+            event.preventDefault();
+            showSuccess('log-success');
+        }
+
+        function saveMobilityProgress(event) {
+            event.preventDefault();
+            showSuccess('mobility-success');
+        }
+
+        function saveWoundAnalysis(event) {
+            event.preventDefault();
+            showSuccess('wound-success');
+        }
+
+        function showSuccess(elementId) {
+            const element = document.getElementById(elementId);
+            element.style.display = 'block';
+            setTimeout(() => {
+                element.style.display = 'none';
+            }, 3000);
+        }
+
+        // Premium modal functions
+        function showPremiumModal() {
+            document.getElementById('premium-modal').classList.add('show');
+        }
+
+        function closePremiumModal() {
+            document.getElementById('premium-modal').classList.remove('show');
+        }
+
+        function upgradeToPremium() {
+            alert('Redirecting to payment page...');
+            closePremiumModal();
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('premium-modal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closePremiumModal();
+            }
+        });
+
+        // Drag and drop functionality for file upload
+        const uploadArea = document.querySelector('.upload-area');
+        
+        uploadArea.addEventListener('dragover', function(e) {
+            e.preventDefault();
+            this.classList.add('dragover');
+        });
+
+        uploadArea.addEventListener('dragleave', function() {
+            this.classList.remove('dragover');
+        });
+
+        uploadArea.addEventListener('drop', function(e) {
+            e.preventDefault();
+            this.classList.remove('dragover');
+            const files = e.dataTransfer.files;
+            document.getElementById('wound-photos').files = files;
+            handleFileUpload(document.getElementById('wound-photos'));
+        });
+    </script>
+</body>
+</html>
